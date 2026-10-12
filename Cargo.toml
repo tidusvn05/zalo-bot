@@ -1,0 +1,60 @@
+[package]
+name = "zalo-bot"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.89"
+license = "MIT OR Apache-2.0"
+description = "Unofficial typed async Rust client for the Zalo Bot Platform API: messages, long polling and webhooks."
+repository = "https://github.com/tidusvn05/zalo-bot"
+homepage = "https://github.com/tidusvn05/zalo-bot"
+documentation = "https://docs.rs/zalo-bot"
+readme = "README.md"
+keywords = ["zalo", "bot", "chatbot", "api", "client"]
+categories = ["api-bindings", "asynchronous", "web-programming::http-client"]
+exclude = [".github/", "docs/plan.md"]
+
+[features]
+default = ["default-tls"]
+## rustls with reqwest's default crypto provider. Turn it off to bring your own provider (ring, …)
+## or your own `reqwest::Client`.
+default-tls = ["reqwest/rustls"]
+## A ready webhook endpoint for axum.
+axum = ["dep:axum", "tokio/rt"]
+
+[dependencies]
+reqwest = { version = "0.13", default-features = false, features = ["json", "rustls-no-provider"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+tokio = { version = "1", features = ["time"] }
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
+axum = { version = "0.8", default-features = false, optional = true }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "net"] }
+wiremock = "0.6"
+axum = { version = "0.8", default-features = false, features = ["tokio", "http1"] }
+tower = { version = "0.5", features = ["util"] }
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_docs = "deny"
+unreachable_pub = "warn"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+unwrap_used = "warn"
+module_name_repetitions = "allow"
+missing_errors_doc = "allow"
+must_use_candidate = "allow"
+return_self_not_must_use = "allow"
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[[example]]
+name = "webhook_axum"
+required-features = ["axum"]
