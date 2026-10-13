@@ -6,4 +6,7 @@
 3. The `Release` workflow checks the tag and changelog, runs the tests, publishes to crates.io with
    the `CARGO_REGISTRY_TOKEN` secret of the `crates-io` environment, and creates the GitHub release.
 
+Publishing by hand (`cargo publish` after `cargo login`) before pushing the tag also works: the
+workflow then skips the publish step and only creates the GitHub release.
+
 A published version cannot be deleted from crates.io, only yanked (`cargo yank --version X.Y.Z`).
