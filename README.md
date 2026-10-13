@@ -1,6 +1,7 @@
 # zalo-bot
 
 [![CI](https://github.com/tidusvn05/zalo-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/tidusvn05/zalo-bot/actions/workflows/ci.yml)
+[![crates.io](https://img.shields.io/crates/v/zalo-bot.svg)](https://crates.io/crates/zalo-bot)
 [![docs.rs](https://img.shields.io/docsrs/zalo-bot)](https://docs.rs/zalo-bot)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](#license)
 [![MSRV 1.89](https://img.shields.io/badge/rustc-1.89%2B-orange.svg)](Cargo.toml)
@@ -31,7 +32,7 @@ reverse-engineered personal-account API.
 
 ```toml
 [dependencies]
-zalo-bot = { git = "https://github.com/tidusvn05/zalo-bot" }
+zalo-bot = "0.1"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 futures-util = "0.3"
 ```
@@ -122,7 +123,7 @@ The default `default-tls` feature enables rustls with reqwest's default crypto p
 provider (for example ring), turn default features off and install it once at start-up:
 
 ```toml
-zalo-bot = { git = "https://github.com/tidusvn05/zalo-bot", default-features = false }
+zalo-bot = { version = "0.1", default-features = false }
 ```
 
 ```rust,ignore
