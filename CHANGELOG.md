@@ -17,6 +17,8 @@ All notable changes are documented here. The format follows
 - Long polling as a `Stream` (`Bot::updates`) with backoff and optional webhook removal.
 - Webhook helpers (`verify_secret`, `parse_update`) and an axum endpoint (`axum` feature).
 - Text helpers: `split_text`, `split_message`, `utf16_len`, `TextStyle::on`.
+- Lenient decoding where the docs disagree with themselves: `sendChatAction` accepts any
+  `result`, `deleteWebhook` accepts `true`.
 
 [Unreleased]: https://github.com/tidusvn05/zalo-bot/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/tidusvn05/zalo-bot/releases/tag/v0.1.0

@@ -369,3 +369,20 @@ impl Respond for Sequence {
         self.answers[i.min(self.answers.len() - 1)].clone()
     }
 }
+
+#[tokio::test]
+async fn lenient_results() {
+    let (server, bot) = setup().await;
+    Mock::given(at("sendChatAction"))
+        .respond_with(ok(json!({})))
+        .mount(&server)
+        .await;
+    Mock::given(at("deleteWebhook"))
+        .respond_with(ok(json!(true)))
+        .mount(&server)
+        .await;
+    bot.send_chat_action("c1", ChatAction::Typing)
+        .await
+        .unwrap();
+    assert!(!bot.delete_webhook().await.unwrap().is_set());
+}
