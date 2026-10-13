@@ -157,6 +157,18 @@ pub struct DeleteWebhook {}
 impl Request for DeleteWebhook {
     const METHOD: &'static str = "deleteWebhook";
     type Response = WebhookInfo;
+
+    /// The docs show `{url, updated_at}` but also say "returns True": accept both.
+    fn decode(result: serde_json::Value) -> serde_json::Result<WebhookInfo> {
+        if result.is_object() {
+            serde_json::from_value(result)
+        } else {
+            Ok(WebhookInfo {
+                url: String::new(),
+                updated_at: 0,
+            })
+        }
+    }
 }
 
 /// `getWebhookInfo`: the registered webhook.
@@ -353,6 +365,11 @@ impl SendChatAction {
 impl Request for SendChatAction {
     const METHOD: &'static str = "sendChatAction";
     type Response = ();
+
+    /// The answer carries nothing useful (no `result`, `true` or `{}`).
+    fn decode(_: serde_json::Value) -> serde_json::Result<()> {
+        Ok(())
+    }
 
     fn validate(&self) -> Result<()> {
         check_chat(&self.chat_id)
