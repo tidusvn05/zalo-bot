@@ -25,7 +25,14 @@ jobs:
           grep -q "^## \[$version\]" CHANGELOG.md || { echo "CHANGELOG.md has no [$version] section"; exit 1; }
       - run: cargo test --all-features --locked
       - name: Publish to crates.io
-        run: cargo publish --locked
+        run: |
+          version=${GITHUB_REF_NAME#v}
+          # Skip when the version was published by hand (`cargo publish` from a maintainer machine).
+          if curl -fsS -A "zalo-bot release workflow" "https://crates.io/api/v1/crates/zalo-bot/$version" >/dev/null 2>&1; then
+            echo "zalo-bot $version is already on crates.io"
+          else
+            cargo publish --locked
+          fi
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
       - name: Release notes
