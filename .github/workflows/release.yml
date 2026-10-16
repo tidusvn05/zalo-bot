@@ -14,7 +14,11 @@ env:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    # crates.io Trusted Publishing trusts this repository, release.yml and this environment.
     environment: crates-io
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v7
       - uses: dtolnay/rust-toolchain@stable
@@ -24,6 +28,8 @@ jobs:
           test "v$version" = "$GITHUB_REF_NAME" || { echo "tag $GITHUB_REF_NAME != v$version"; exit 1; }
           grep -q "^## \[$version\]" CHANGELOG.md || { echo "CHANGELOG.md has no [$version] section"; exit 1; }
       - run: cargo test --all-features --locked
+      - uses: rust-lang/crates-io-auth-action@v1
+        id: auth
       - name: Publish to crates.io
         run: |
           version=${GITHUB_REF_NAME#v}
@@ -34,7 +40,7 @@ jobs:
             cargo publish --locked
           fi
         env:
-          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+          CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
       - name: Release notes
         run: |
           version=${GITHUB_REF_NAME#v}
